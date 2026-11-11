@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 @RequestMapping({"/api/weather", "/api/v1/weather"})
 @Tag(name = "Weather API", description = "Operations for retrieving weather information")
 @Validated
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173"})
 public class WeatherController {
 
     private static final Logger log =
