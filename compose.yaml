@@ -1,0 +1,18 @@
+
+services:
+  weather-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: weather-api:1.0
+    container_name: weather-api-container
+
+    ports:
+      - "8024:8024"
+
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: "8024"
+
+    restart: unless-stopped
