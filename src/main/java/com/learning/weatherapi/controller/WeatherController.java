@@ -16,7 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@RequestMapping("api/v1/weather")
+@RequestMapping({
+        "/api/weather",
+        "/api/v1/weather"
+})
 @Tag(
         name = "Weather API",
         description = "Operations for retrieving weather information"
@@ -41,11 +44,9 @@ public class WeatherController {
     @GetMapping("/{city}")
     public WeatherResponseDTO getWeather(
             @PathVariable
-            @NotBlank(message = "City name cannot be empty")
+            @NotBlank
             @Pattern(
-                    regexp = "^[a-zA-Z][a-zA-Z\\s'-]*$",
-                    message = "City name contains invalid characters"
-            )
+                    regexp = "^[a-zA-Z][a-zA-Z\\s'-]*$")
             String city) {
 
         log.info("Received weather request for city: {}", city);
