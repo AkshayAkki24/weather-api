@@ -5,10 +5,7 @@ import com.learning.weatherapi.service.WeatherService;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -16,15 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@RequestMapping({
-        "/api/weather",
-        "/api/v1/weather"
-})
-@Tag(
-        name = "Weather API",
-        description = "Operations for retrieving weather information"
-)
+@RequestMapping({"/api/weather", "/api/v1/weather"})
+@Tag(name = "Weather API", description = "Operations for retrieving weather information")
 @Validated
+@CrossOrigin(origins = "http://localhost:5173")
 public class WeatherController {
 
     private static final Logger log =
