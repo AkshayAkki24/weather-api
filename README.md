@@ -168,3 +168,16 @@ weather-api/
 - Add API rate limiting.
 - Add health checks and monitoring.
 - Deploy the application to a cloud platform.
+
+
+## Development Workflow
+
+This project follows Git feature branch development.
+
+1. Create a feature branch from main.
+2. Implement the required changes.
+3. Run unit and integration tests.
+4. Commit the changes.
+5. Push the feature branch to GitHub.
+6. Create a Pull Request.
+7. Review and merge approved changes into main.

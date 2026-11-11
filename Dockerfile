@@ -1,25 +1,44 @@
 
-# Stage 1: Build the Spring Boot application
+# ----------------------------
+# Stage 1: Build application
+# ----------------------------
 FROM eclipse-temurin:25-jdk AS build
 
-WORKDIR /app
+WORKDIR /workspace
 
-# Copy project source code
-COPY . .
+# Copy Maven configuration first for better layer caching
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
 
-# Build the executable JAR
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests
+# Download dependencies
+RUN chmod +x mvnw && ./mvnw -B dependency:go-offline
 
-# Stage 2: Run the application
+# Copy application source
+COPY src/ src/
+
+# Build executable JAR
+RUN ./mvnw -B clean package -DskipTests
+
+
+# ----------------------------
+# Stage 2: Runtime image
+# ----------------------------
 FROM eclipse-temurin:25-jre
 
 WORKDIR /app
 
-# Copy the generated JAR from the build stage
-COPY --from=build /app/target/*.jar app.jar
+# Install curl for Docker health checks
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Expose application port
+# Copy only the executable JAR
+COPY --from=build /workspace/target/*.jar app.jar
+
 EXPOSE 8024
 
-# Start Spring Boot application
+# Check whether the application is healthy
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD curl -fsS http://localhost:8024/actuator/health || exit 1
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
